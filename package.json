@@ -1,0 +1,62 @@
+{
+  "name": "orphan-files",
+  "version": "1.0.0",
+  "description": "🔨 Find unused files in your JavaScript/TypeScript project by analysing the import graph",
+  "main": "index.js",
+  "types": "types/index.d.ts",
+  "bin": {
+    "orphan-files": "bin/orphan-files.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "types/",
+    "index.js",
+    "package.json",
+    "README.md",
+    "!**/*.spec.*",
+    "!**/*.test.*"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "version": "auto-changelog -p && git add CHANGELOG.md"
+  },
+  "keywords": [
+    "cli",
+    "unused",
+    "dead-code",
+    "files",
+    "imports",
+    "javascript",
+    "typescript",
+    "static-analysis"
+  ],
+  "author": {
+    "name": "Piotr Kowalski",
+    "email": "piecioshka@gmail.com",
+    "url": "https://piecioshka.pl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/piecioshka/orphan-files.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.12.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "@babel/parser": "^7.28.5",
+    "@babel/traverse": "^7.28.5",
+    "@babel/types": "^7.28.5",
+    "glob": "^13.0.0",
+    "minimatch": "^10.1.1",
+    "minimist": "^1.2.8"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.8",
+    "auto-changelog": "^2.6.0",
+    "vitest": "^4.1.8"
+  }
+}
