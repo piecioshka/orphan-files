@@ -213,6 +213,11 @@ console.log(unused);
 
 ## Related packages
 
+> [!TIP]
+> See **[docs/comparison.md](docs/comparison.md)** for a detailed, up-to-date feature comparison of
+> all the tools below against `orphan-files` (analysis model, file/export/dependency detection,
+> monorepo support, output formats, maintenance status).
+
 ### CLI / API
 
 - **[knip](https://www.npmjs.com/package/knip)** — Detects unused files, exports, and dependencies in JS/TS projects; ~150 built-in framework plugins, supports monorepos.
