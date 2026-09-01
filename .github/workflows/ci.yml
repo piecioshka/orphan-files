@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: testing-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -25,3 +25,17 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm test
+
+  action-self-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+      - name: Run the composite action against this repository
+        uses: ./
+        with:
+          directory: .
+          format: cli
