@@ -10,7 +10,7 @@
 [![downloads count](https://img.shields.io/npm/dt/orphan-files.svg)](https://www.npmjs.com/package/orphan-files)
 [![size](https://packagephobia.com/badge?p=orphan-files)](https://packagephobia.com/result?p=orphan-files)
 [![license](https://img.shields.io/npm/l/orphan-files.svg)](https://piecioshka.mit-license.org)
-[![github-ci](https://github.com/piecioshka/orphan-files/actions/workflows/testing.yml/badge.svg)](https://github.com/piecioshka/orphan-files/actions/workflows/testing.yml)
+[![github-ci](https://github.com/piecioshka/orphan-files/actions/workflows/ci.yml/badge.svg)](https://github.com/piecioshka/orphan-files/actions/workflows/ci.yml)
 
 CLI tool for finding unused files in JavaScript/TypeScript projects.
 
