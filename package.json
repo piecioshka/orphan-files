@@ -1,6 +1,6 @@
 {
   "name": "orphan-files",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "🔨 Find unused files in your JavaScript/TypeScript project by analysing the import graph",
   "main": "index.js",
   "types": "types/index.d.ts",
