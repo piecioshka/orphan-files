@@ -81,23 +81,23 @@ orphan-files --init
 
 ### Options
 
-| Option                     | Description                                               |
-| -------------------------- | --------------------------------------------------------- |
-| `-c, --config <path>`      | Config file (default: `orphan-files.config.js`)           |
-| `-f, --format <type>`      | Output: `cli`, `json`, `sarif`, `pdf` (default: `cli`)    |
-| `--sort <key>`             | Sort unused files: `path`, `name`, `size`                 |
-| `--group`                  | Group unused files by directory                           |
-| `--why <file>`             | Explain why a file is kept or unused, then exit           |
-| `--graph <type>`           | Print the dependency graph: `mermaid`, `dot`, `html`      |
-| `--fix`                    | Preview files that would be deleted (dry-run)             |
-| `--force`                  | With `--fix`, actually delete the files                   |
-| `--baseline <path>`        | Ignore unused files recorded in a baseline file           |
+| Option | Description |
+| --- | --- |
+| `-c, --config <path>` | Config file (default: `orphan-files.config.js`) |
+| `-f, --format <type>` | Output: `cli`, `json`, `sarif`, `pdf` (default: `cli`) |
+| `--sort <key>` | Sort unused files: `path`, `name`, `size` |
+| `--group` | Group unused files by directory |
+| `--why <file>` | Explain why a file is kept or unused, then exit |
+| `--graph <type>` | Print the dependency graph: `mermaid`, `dot`, `html` |
+| `--fix` | Preview files that would be deleted (dry-run) |
+| `--force` | With `--fix`, actually delete the files |
+| `--baseline <path>` | Ignore unused files recorded in a baseline file |
 | `--update-baseline [path]` | Write the current unused files as the baseline, then exit |
-| `--max-unused <n>`         | Exit `0` when the unused count is at most `<n>`           |
-| `--no-gitignore`           | Do not honour `.gitignore`                                |
-| `--init`                   | Write a starter config file, then exit                    |
-| `-v, --version`            | Print version                                             |
-| `-h, --help`               | Show help                                                 |
+| `--max-unused <n>` | Exit `0` when the unused count is at most `<n>` |
+| `--no-gitignore` | Do not honour `.gitignore` |
+| `--init` | Write a starter config file, then exit |
+| `-v, --version` | Print version |
+| `-h, --help` | Show help |
 
 ### Incremental adoption (baseline)
 
@@ -142,18 +142,17 @@ export default {
 };
 ```
 
-Config files may be `.js`, `.mjs`, `.cjs` (default export) or `.json`. Monorepos
-are supported: each workspace package's `package.json` entry points are honoured.
+Config files may be `.js`, `.mjs`, `.cjs` (default export) or `.json`. Monorepos are supported: each workspace package's `package.json` entry points are honoured.
 
 ### Framework auto-detection
 
 The tool reads `package.json` and automatically adds exceptions for known frameworks:
 
-| Framework     | Detected exceptions                                                                            |
-| ------------- | ---------------------------------------------------------------------------------------------- |
-| **Next.js**   | `app/**/page.tsx`, `app/**/route.ts`, `app/**/layout.tsx`, `sitemap.ts`, `middleware.ts`, etc. |
-| **Storybook** | `**/*.stories.{ts,tsx}`                                                                        |
-| **Remotion**  | `remotion.config.*`, `src/index.ts`                                                            |
+| Framework | Detected exceptions |
+| --- | --- |
+| **Next.js** | `app/**/page.tsx`, `app/**/route.ts`, `app/**/layout.tsx`, `sitemap.ts`, `middleware.ts`, etc. |
+| **Storybook** | `**/*.stories.{ts,tsx}` |
+| **Remotion** | `remotion.config.*`, `src/index.ts` |
 
 ### TypeScript path aliases
 
@@ -168,8 +167,7 @@ Reads `tsconfig.json` and resolves path aliases automatically (e.g. `@/*` → `s
 - `jest.mock('...')` / `vi.mock('...')`
 - `export * from '...'` / `export { x } from '...'`
 
-Files using **decorators** (Angular, NestJS, TypeORM, MobX) and other modern
-TypeScript syntax are parsed correctly.
+Files using **decorators** (Angular, NestJS, TypeORM, MobX) and other modern TypeScript syntax are parsed correctly.
 
 ## GitHub Action
 
@@ -189,17 +187,15 @@ jobs:
 
 ### Inputs
 
-| Input         | Default  | Description                                                        |
-| ------------- | -------- | ------------------------------------------------------------------ |
-| `directory`   | `.`      | Project directory to scan                                          |
-| `format`      | `cli`    | Output format: `cli`, `json`, `sarif`, `pdf`                       |
-| `args`        | _(none)_ | Extra CLI arguments, e.g. `--baseline .orphan-files-baseline.json` |
-| `output-file` | _(none)_ | Write the report to this file instead of stdout                    |
-| `version`     | `latest` | npm version/tag of `orphan-files` to run                           |
+| Input | Default | Description |
+| --- | --- | --- |
+| `directory` | `.` | Project directory to scan |
+| `format` | `cli` | Output format: `cli`, `json`, `sarif`, `pdf` |
+| `args` | _(none)_ | Extra CLI arguments, e.g. `--baseline .orphan-files-baseline.json` |
+| `output-file` | _(none)_ | Write the report to this file instead of stdout |
+| `version` | `latest` | npm version/tag of `orphan-files` to run |
 
-The action exits with code `1` when unused files are found, so the job fails
-by default. Use `args: "--max-unused <n>"` or a [baseline](#incremental-adoption-baseline)
-to adopt it incrementally.
+The action exits with code `1` when unused files are found, so the job fails by default. Use `args: "--max-unused <n>"` or a [baseline](#incremental-adoption-baseline) to adopt it incrementally.
 
 ### Code scanning (SARIF)
 
@@ -268,10 +264,7 @@ Contributions, issues and feature requests are welcome!<br /> Feel free to check
 
 ## Related packages
 
-> [!TIP]
-> See **[docs/comparison.md](docs/comparison.md)** for a detailed, up-to-date feature comparison of
-> all the tools below against `orphan-files` (analysis model, file/export/dependency detection,
-> monorepo support, output formats, maintenance status).
+> [!TIP] See **[docs/comparison.md](docs/comparison.md)** for a detailed, up-to-date feature comparison of all the tools below against `orphan-files` (analysis model, file/export/dependency detection, monorepo support, output formats, maintenance status).
 
 ### CLI / API
 

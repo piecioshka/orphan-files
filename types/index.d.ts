@@ -1,54 +1,54 @@
 export interface OrphanFilesConfig {
-    include?: string[];
-    exclude?: string[];
-    /** Entry points: kept, and everything they import is kept transitively. */
-    entry?: string[];
-    /** Treated as additional entry points (kept and seed reachability). */
-    exceptions?: string[];
+  include?: string[];
+  exclude?: string[];
+  /** Entry points: kept, and everything they import is kept transitively. */
+  entry?: string[];
+  /** Treated as additional entry points (kept and seed reachability). */
+  exceptions?: string[];
 }
 
 export interface TsAliases {
-    paths?: Record<string, string[]>;
-    pathsBaseDir?: string;
-    baseUrlDir?: string;
+  paths?: Record<string, string[]>;
+  pathsBaseDir?: string;
+  baseUrlDir?: string;
 }
 
 export interface AnalyzeOptions {
-    projectDir?: string;
-    entryPatterns?: string[];
-    tsAliases?: TsAliases;
+  projectDir?: string;
+  entryPatterns?: string[];
+  tsAliases?: TsAliases;
 }
 
 export interface AnalysisResult {
-    /** file -> resolved files it imports */
-    graph: Map<string, string[]>;
-    /** file -> files that import it */
-    reverseGraph: Map<string, string[]>;
-    /** entry-point files (reachability roots) */
-    entries: Set<string>;
-    /** files reachable from any entry point */
-    reachable: Set<string>;
-    /** files NOT reachable from any entry point */
-    unused: string[];
-    tsAliases: TsAliases;
+  /** file -> resolved files it imports */
+  graph: Map<string, string[]>;
+  /** file -> files that import it */
+  reverseGraph: Map<string, string[]>;
+  /** entry-point files (reachability roots) */
+  entries: Set<string>;
+  /** files reachable from any entry point */
+  reachable: Set<string>;
+  /** files NOT reachable from any entry point */
+  unused: string[];
+  tsAliases: TsAliases;
 }
 
 export interface ExplainResult {
-    file: string;
-    status: 'entry' | 'used' | 'unused' | 'unknown';
-    reason: string;
-    /** chain of relative paths from an entry point to the file (for "used") */
-    path: string[];
+  file: string;
+  status: "entry" | "used" | "unused" | "unknown";
+  reason: string;
+  /** chain of relative paths from an entry point to the file (for "used") */
+  path: string[];
 }
 
 /**
  * Scans a directory for files matching the given glob pattern.
  */
 export function scanProject(
-    cwd: string,
-    pattern?: string,
-    ignore?: string[],
-    options?: { respectGitignore?: boolean }
+  cwd: string,
+  pattern?: string,
+  ignore?: string[],
+  options?: { respectGitignore?: boolean },
 ): Promise<string[]>;
 
 /**
@@ -62,9 +62,9 @@ export function extractImports(filePath: string): string[];
  * that only import each other.
  */
 export function analyze(
-    allFiles: string[],
-    fileImports: Record<string, string[]>,
-    options?: AnalyzeOptions
+  allFiles: string[],
+  fileImports: Record<string, string[]>,
+  options?: AnalyzeOptions,
 ): AnalysisResult;
 
 /**
@@ -72,10 +72,10 @@ export function analyze(
  * `exceptionPatterns` are treated as additional entry points.
  */
 export function findUnusedFiles(
-    allFiles: string[],
-    fileImports: Record<string, string[]>,
-    exceptionPatterns?: string[],
-    projectDir?: string
+  allFiles: string[],
+  fileImports: Record<string, string[]>,
+  exceptionPatterns?: string[],
+  projectDir?: string,
 ): string[];
 
 /**
@@ -83,7 +83,7 @@ export function findUnusedFiles(
  * an entry point.
  */
 export function explainFile(
-    targetFile: string,
-    result: AnalysisResult,
-    projectDir?: string
+  targetFile: string,
+  result: AnalysisResult,
+  projectDir?: string,
 ): ExplainResult;
