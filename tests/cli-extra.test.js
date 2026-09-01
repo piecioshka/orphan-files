@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import os from "os";
 
-describe("cli — new features", () => {
+describe("cli - new features", () => {
   let tmpDir;
 
   beforeEach(() => {

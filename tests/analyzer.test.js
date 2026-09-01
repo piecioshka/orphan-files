@@ -205,7 +205,7 @@ describe("findUnusedFiles", () => {
           path.join(tmpDir2, "src", "index.ts"),
           `import { x } from '@/utils';`,
         );
-        // target "./src" without "/*" — exercises the false branch of target.endsWith('/*')
+        // target "./src" without "/*" - exercises the false branch of target.endsWith('/*')
         fs.writeFileSync(
           path.join(tmpDir2, "tsconfig.json"),
           JSON.stringify({
@@ -243,7 +243,7 @@ describe("findUnusedFiles", () => {
           path.join(tmpDir2, "src", "index.ts"),
           `import { x } from '@utils';`,
         );
-        // first target missing, second target exists — exercises the false branch of if (found) in exact alias loop
+        // first target missing, second target exists - exercises the false branch of if (found) in exact alias loop
         fs.writeFileSync(
           path.join(tmpDir2, "tsconfig.json"),
           JSON.stringify({
@@ -315,7 +315,7 @@ describe("findUnusedFiles", () => {
         );
         fs.writeFileSync(path.join(tmpDir, "a.js"), "// nothing");
         const a = path.join(tmpDir, "a.js");
-        // Should not throw — gracefully ignores bad tsconfig
+        // Should not throw - gracefully ignores bad tsconfig
         const unused = findUnusedFiles([a], { [a]: [] }, [], tmpDir);
         expect(unused).toContain(a);
       } finally {

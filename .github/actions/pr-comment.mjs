@@ -52,7 +52,7 @@ function buildBody(report, { serverUrl, repository, runId }) {
     "### 🔨 orphan-files",
     "",
     `Found **${unusedCount}** unused ${unusedCount === 1 ? "file" : "files"} ` +
-      `out of ${totalFiles} scanned — ${formatBytes(reclaimableBytes)} reclaimable.`,
+      `out of ${totalFiles} scanned - ${formatBytes(reclaimableBytes)} reclaimable.`,
     "",
   ];
 
@@ -137,7 +137,7 @@ async function main() {
     await api(`/issues/comments/${existing.id}`, {
       method: "PATCH",
       body: JSON.stringify({
-        body: `${MARKER}\n### 🔨 orphan-files\n\nNo unused files found — previously reported files are gone. ✅`,
+        body: `${MARKER}\n### 🔨 orphan-files\n\nNo unused files found - previously reported files are gone. ✅`,
       }),
     });
     console.log(`Updated comment ${existing.id}: the report is now clean.`);

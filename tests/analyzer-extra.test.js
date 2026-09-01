@@ -16,7 +16,7 @@ function setup(files) {
   return { dir, abs, cleanup: () => fs.rmSync(dir, { recursive: true }) };
 }
 
-describe("analyze — reachability", () => {
+describe("analyze - reachability", () => {
   it("reports an island of mutually-importing dead files as unused", () => {
     const { dir, abs, cleanup } = setup({
       "index.js": `import './used.js';`,

@@ -8,10 +8,10 @@ A detailed comparison of tools for finding unused ("orphan") files in JavaScript
 
 ## TL;DR
 
-- **`orphan-files`** sits in a narrow category: it finds **whole unused files** through a **true reachability analysis** of the import graph (BFS from entry points). The key property: two dead islands of files that only import each other **do not mask each other** — neither is reachable from an entry point, so both are reported.
+- **`orphan-files`** sits in a narrow category: it finds **whole unused files** through a **true reachability analysis** of the import graph (BFS from entry points). The key property: two dead islands of files that only import each other **do not mask each other** - neither is reachable from an entry point, so both are reported.
 - Tools that do the **same job** (whole files + reachability + standalone CLI) are few: **[knip](https://www.npmjs.com/package/knip)** (the de-facto standard, but much broader in scope), **[rev-dep](https://www.npmjs.com/package/rev-dep)**, **[skott](https://www.npmjs.com/package/skott)**, plus the deprecated/abandoned `unimported`, `deadfile`, `next-unused` and `orphan`.
 - Most other tools are a **different category**: unused _exports/symbols_ (`ts-unused-exports`, `find-unused-exports`, `tsr`), _local dead code_ (`dead-code-checker`), _dependencies_ (`depcheck`), _imports_ (`eslint-plugin-unused-imports`) or _graph visualisation_ (`madge`). They are complementary, not substitutes for whole-file detection.
-- Bundler plugins (`webpack-*`, `vite-plugin-unused-code`, `rollup-plugin-unused`, `unplugin-slim`) require **running a build** — a fundamental difference from a static CLI.
+- Bundler plugins (`webpack-*`, `vite-plugin-unused-code`, `rollup-plugin-unused`, `unplugin-slim`) require **running a build** - a fundamental difference from a static CLI.
 - **What's unique about `orphan-files`**: it is the only _file-level_ tool that combines **SARIF + PDF + baseline + `--why` + graph export (mermaid/dot/html) + framework auto-detection + a composite GitHub Action** in one place.
 
 ---
@@ -29,10 +29,10 @@ A detailed comparison of tools for finding unused ("orphan") files in JavaScript
 
 **File-analysis model:**
 
-- **Reachability** — graph traversal from entry points; also catches dead islands.
-- **`importedBy=0` heuristic** — a file is "unused" only if nothing imports it; **does not** catch mutually-importing islands cut off from entry points.
-- **Isolated nodes** — same as above, in graph tools (orphan nodes).
-- **Textual** — string search, no AST/graph (brittle).
+- **Reachability** - graph traversal from entry points; also catches dead islands.
+- **`importedBy=0` heuristic** - a file is "unused" only if nothing imports it; **does not** catch mutually-importing islands cut off from entry points.
+- **Isolated nodes** - same as above, in graph tools (orphan nodes).
+- **Textual** - string search, no AST/graph (brittle).
 
 ---
 
@@ -42,7 +42,7 @@ A detailed comparison of tools for finding unused ("orphan") files in JavaScript
 | --- | --- |
 | Detects | 🗂️ Files |
 | Analysis model | **Reachability** (BFS from entry points; dead islands don't mask each other) |
-| Parser | Babel (AST) — JSX, TS, decorators (Angular/NestJS/TypeORM/MobX), top-level await, import attributes |
+| Parser | Babel (AST) - JSX, TS, decorators (Angular/NestJS/TypeORM/MobX), top-level await, import attributes |
 | Recognised imports | `import`, `require`, dynamic `import()` (+ template literal as a glob), `import.meta.glob`, `jest.mock`/`vi.mock`, `export * from`, `export {x} from` |
 | TypeScript | ✅ `tsconfig` `paths` + `baseUrl` aliases |
 | Monorepo / workspaces | ✅ honours each package's `package.json` entry points |
@@ -52,21 +52,21 @@ A detailed comparison of tools for finding unused ("orphan") files in JavaScript
 | Output formats | **`cli`, `json`, `sarif`, `pdf`** |
 | Graph export | ✅ `--graph mermaid` / `dot` / `html` |
 | Baseline (incremental adoption) | ✅ `--update-baseline` / `--baseline` |
-| Explainability | ✅ `--why <file>` — why a file is kept or unused |
+| Explainability | ✅ `--why <file>` - why a file is kept or unused |
 | CI | SARIF → "Code scanning" tab, composite **GitHub Action** (`piecioshka/orphan-files@v1`), `--max-unused`, exit code 1 |
 | Other | honours `.gitignore`, `--sort`, `--group`, `--init` |
-| Version / status | 1.0.0 — new, MIT, Node ≥ 20.12 |
+| Version / status | 1.0.0 - new, MIT, Node ≥ 20.12 |
 
 ---
 
-## A. Direct competitors — whole-file detection (standalone CLI)
+## A. Direct competitors - whole-file detection (standalone CLI)
 
 This is the real "same category". Ordered roughly by usefulness in 2026.
 
 | Tool | Detects | File model | TS | Monorepo | Auto-delete | Formats | Version (date) | Downloads/wk | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | **`orphan-files`** | 🗂️ | **Reachability** | ✅ | ✅ | ✅ `--fix`/`--force` | cli, **json, sarif, pdf** | 1.0.0 | new | **active** |
-| **[knip](https://www.npmjs.com/package/knip)** | 🗂️🔣📦 | **Reachability** | ✅ | ✅ (strong) | ✅ (files: `--allow-remove-files`) | json, markdown, codeowners, codeclimate, github-actions | 6.34.0 (2026-08) | ~14.3M | **active — market standard** |
+| **[knip](https://www.npmjs.com/package/knip)** | 🗂️🔣📦 | **Reachability** | ✅ | ✅ (strong) | ✅ (files: `--allow-remove-files`) | json, markdown, codeowners, codeclimate, github-actions | 6.34.0 (2026-08) | ~14.3M | **active - market standard** |
 | **[rev-dep](https://www.npmjs.com/package/rev-dep)** | 🗂️🔣🕸️📦 | **Reachability** | ✅ | ✅ (first-class) | ✅ `config run --fix` | json, text | 3.0.0 (2026-08) | ~55k | **most actively developed** |
 | **[skott](https://www.npmjs.com/package/skott)** | 🗂️🕸️📦 | **Reachability** | ✅ | ✅ (partial) | ❌ | webapp, json, mermaid | 0.35.11 (2026-04) | ~91k | active |
 | **[deadfile](https://www.npmjs.com/package/deadfile)** | 🗂️ | **Reachability** | ⚠️ weak | ❌ | ❌ | console, HTML report, json | 2.1.1 (2024-03) | ~1k | inactive ~2 yrs |
@@ -78,13 +78,13 @@ This is the real "same category". Ordered roughly by usefulness in 2026.
 
 ### Per-tool notes
 
-- **knip** — the most serious competitor and a functional superset: files **+** exports **+** dependencies, ~155 framework plugins, excellent monorepo support, auto-fix, many reporters. It's where the authors of `unimported`, `next-unused`, `tsr` and `depcheck` redirect users. **What it lacks that `orphan-files` has:** native **SARIF**, **PDF**, the **`--why`** command, graph export (mermaid/dot/html) as a built-in, and a ready-made composite GitHub Action. In return, knip has a heavier configuration surface and needs Node ≥ 20.19. **Positioning:** `orphan-files` is a lighter, focused "files only, but with rich CI/reporting I/O" alternative (SARIF/PDF/baseline/why).
-- **rev-dep** — written in Go, very fast; reachability + file auto-deletion + architecture-boundary enforcement + first-class monorepo. Closest to `orphan-files` in philosophy (reachability + fix), but **no** SARIF/PDF/graph and a more "engineering-heavy" config. A real, growing competitor.
-- **skott** — strong on **graph visualisation** (web app, mermaid) + reachability + cycles, but does **not** delete files and does not analyse exports. Complementary: good for exploration, weaker for "clean up and fail CI".
-- **deadfile** — does a true entry-point traversal (better on dead islands than `dead-files`), has a nice HTML report, but effectively unmaintained since 2024, weak TS support (no `tsconfig paths`), no monorepo, no auto-deletion.
-- **dead-files** — a paradox: the only one here with interactive deletion, but the **weakest model** — an `importedBy=0` heuristic (regex, not AST) that **misses dead islands**. Negligible adoption, no repo.
-- **next-unused** / **unimported** / **orphan** — historical, **abandoned**; the first two explicitly redirect to `knip`. `unimported` still sees ~114k downloads/wk (legacy in pipelines).
-- **delete-react-zombies** — text search for `import ${name}`; brittle (misses dynamic imports, aliases, barrels), React components only, dead since 2022.
+- **knip** - the most serious competitor and a functional superset: files **+** exports **+** dependencies, ~155 framework plugins, excellent monorepo support, auto-fix, many reporters. It's where the authors of `unimported`, `next-unused`, `tsr` and `depcheck` redirect users. **What it lacks that `orphan-files` has:** native **SARIF**, **PDF**, the **`--why`** command, graph export (mermaid/dot/html) as a built-in, and a ready-made composite GitHub Action. In return, knip has a heavier configuration surface and needs Node ≥ 20.19. **Positioning:** `orphan-files` is a lighter, focused "files only, but with rich CI/reporting I/O" alternative (SARIF/PDF/baseline/why).
+- **rev-dep** - written in Go, very fast; reachability + file auto-deletion + architecture-boundary enforcement + first-class monorepo. Closest to `orphan-files` in philosophy (reachability + fix), but **no** SARIF/PDF/graph and a more "engineering-heavy" config. A real, growing competitor.
+- **skott** - strong on **graph visualisation** (web app, mermaid) + reachability + cycles, but does **not** delete files and does not analyse exports. Complementary: good for exploration, weaker for "clean up and fail CI".
+- **deadfile** - does a true entry-point traversal (better on dead islands than `dead-files`), has a nice HTML report, but effectively unmaintained since 2024, weak TS support (no `tsconfig paths`), no monorepo, no auto-deletion.
+- **dead-files** - a paradox: the only one here with interactive deletion, but the **weakest model** - an `importedBy=0` heuristic (regex, not AST) that **misses dead islands**. Negligible adoption, no repo.
+- **next-unused** / **unimported** / **orphan** - historical, **abandoned**; the first two explicitly redirect to `knip`. `unimported` still sees ~114k downloads/wk (legacy in pipelines).
+- **delete-react-zombies** - text search for `import ${name}`; brittle (misses dynamic imports, aliases, barrels), React components only, dead since 2022.
 
 ---
 
@@ -95,13 +95,13 @@ This is the real "same category". Ordered roughly by usefulness in 2026.
 | **[madge](https://www.npmjs.com/package/madge)** | 🕸️🗂️ | ⚠️ isolated nodes (`--orphans`/`--leaves`) | dot, svg/png (Graphviz), json | ❌ | 8.0.0 (2024-08) | **~3.0M** | stable, slow-moving |
 | **[skott](https://www.npmjs.com/package/skott)** | 🕸️🗂️📦 | Reachability | webapp, mermaid, json | ❌ | 0.35.11 (2026-04) | ~91k | active |
 
-- **madge** — a popularity giant (~2.5M/wk, often a dependency of other tools). But `--orphans` only reports **isolated nodes** (nothing imports them), **not** code unreachable from entry points — so it **misses dead islands**. No export analysis, no auto-deletion, visualisation needs Graphviz. A different goal (drawing the graph), not cleanup.
+- **madge** - a popularity giant (~2.5M/wk, often a dependency of other tools). But `--orphans` only reports **isolated nodes** (nothing imports them), **not** code unreachable from entry points - so it **misses dead islands**. No export analysis, no auto-deletion, visualisation needs Graphviz. A different goal (drawing the graph), not cleanup.
 
 ---
 
-## C. Different category — unused EXPORTS / DEAD CODE (not whole files)
+## C. Different category - unused EXPORTS / DEAD CODE (not whole files)
 
-These work at the **symbol** level, not whole files — **complementary**, not competing.
+These work at the **symbol** level, not whole files - **complementary**, not competing.
 
 | Tool | Detects | Whole files? | Auto-fix | TS | Version | Downloads/wk | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -110,9 +110,9 @@ These work at the **symbol** level, not whole files — **complementary**, not c
 | **[find-unused-exports](https://www.npmjs.com/package/find-unused-exports)** | 🔣 | ❌ | ❌ | ✅ | 9.0.0 (2026-06) | ~6.5k | active (freshest) |
 | **[dead-code-checker](https://www.npmjs.com/package/dead-code-checker)** | 💀 | ❌ | ❌ | ✅ | 1.1.0 (2025-07) | ~1.6k | niche, maintained |
 
-- **tsr** is notable: the only one in this group that operates on whole files **and** deletes them (tree-shaking for source) — but the project is **ended/archived** (LINE redirects to `knip`).
-- **ts-unused-exports** — the most popular "export checker"; has a flag that reports files where **all** exports are unused (partial "whole file" coverage), but it doesn't delete and has no JSON/SARIF.
-- **dead-code-checker** — looks for unused functions/variables (not files, not dependencies).
+- **tsr** is notable: the only one in this group that operates on whole files **and** deletes them (tree-shaking for source) - but the project is **ended/archived** (LINE redirects to `knip`).
+- **ts-unused-exports** - the most popular "export checker"; has a flag that reports files where **all** exports are unused (partial "whole file" coverage), but it doesn't delete and has no JSON/SARIF.
+- **dead-code-checker** - looks for unused functions/variables (not files, not dependencies).
 
 ---
 
@@ -123,12 +123,12 @@ These work at the **symbol** level, not whole files — **complementary**, not c
 | **[eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports)** | 🧩 | static (ESLint, no build) | ✅ `eslint --fix` | 4.4.1 (2026-02) | **~9.6M** | dominant |
 | **[depcheck](https://www.npmjs.com/package/depcheck)** | 📦 | heuristic | ❌ | 1.4.7 (2023-10) | ~1.68M | archived |
 
-- **eslint-plugin-unused-imports** — huge adoption, auto-fix, but detects **imports only**, not whole files. Great **alongside** `orphan-files`, not instead of it.
-- **depcheck** — `package.json` dependencies only; no files, no monorepo, no fix; its README recommends `knip`.
+- **eslint-plugin-unused-imports** - huge adoption, auto-fix, but detects **imports only**, not whole files. Great **alongside** `orphan-files`, not instead of it.
+- **depcheck** - `package.json` dependencies only; no files, no monorepo, no fix; its README recommends `knip`.
 
 ---
 
-## E. Bundler plugins — require running a build
+## E. Bundler plugins - require running a build
 
 A fundamental difference: they analyse the module graph **from a compilation**, so you must run the bundler. `orphan-files` works **statically**, with no build.
 
@@ -145,7 +145,7 @@ A fundamental difference: they analyse the module graph **from a compilation**, 
 
 ---
 
-## F. Differentiation matrix — `orphan-files` vs. the rest
+## F. Differentiation matrix - `orphan-files` vs. the rest
 
 | Feature | orphan-files | knip | rev-dep | skott | madge | unimported | dead-files |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -171,22 +171,22 @@ A fundamental difference: they analyse the module graph **from a compilation**, 
 **Wins (unique or rare strengths):**
 
 - **Richest I/O for CI in its class:** the only _file-level_ tool that ships **SARIF** (Code scanning tab), **PDF**, **JSON** and a ready **composite GitHub Action** all at once. knip/rev-dep/skott have neither SARIF nor PDF.
-- **`--why <file>`** — explains why a file is kept or considered dead (debugging false positives). Rare in this category.
-- **Built-in graph export** (mermaid/dot/html) together with dead-file detection in one tool — knip doesn't have this; madge/skott don't delete files.
+- **`--why <file>`** - explains why a file is kept or considered dead (debugging false positives). Rare in this category.
+- **Built-in graph export** (mermaid/dot/html) together with dead-file detection in one tool - knip doesn't have this; madge/skott don't delete files.
 - **Light and focused:** does one thing (files) well, with reachability and AST, without knip's config weight and without requiring Node ≥ 20.19.
 
 **Loses / gaps vs. the leaders:**
 
-- **Scope:** knip and rev-dep additionally detect **exports** and **dependencies** in one pass. `orphan-files` deliberately does files only — less in a single tool.
+- **Scope:** knip and rev-dep additionally detect **exports** and **dependencies** in one pass. `orphan-files` deliberately does files only - less in a single tool.
 - **Framework plugins:** knip has ~155; `orphan-files` has a handful of auto-detections (Next/Vite/Storybook/Remotion). Exotic frameworks may need manual config.
 - **Adoption / maturity:** knip (~14.3M/wk) and madge (~3.0M/wk) are ecosystems; `orphan-files` is new (1.0.0), so less battle-tested and a smaller community.
-- **Speed:** rev-dep (Go) claims a performance edge on very large codebases (Babel is slower than native Go — though that's the author's claim, not an independent benchmark).
+- **Speed:** rev-dep (Go) claims a performance edge on very large codebases (Babel is slower than native Go - though that's the author's claim, not an independent benchmark).
 
 ---
 
-## H. Positioning — one sentence
+## H. Positioning - one sentence
 
-> **`orphan-files`** is a lightweight, focused "unused files only, done properly" tool: true reachability (dead islands don't mask each other) + AST + auto-fix, wrapped in **the richest CI/reporting output in its class (SARIF, PDF, baseline, `--why`, graph, GitHub Action)**. A natural alternative for those who find `knip` too broad, yet want more than the abandoned `unimported`/`deadfile` — especially when GitHub Code Scanning (SARIF) integration or a PDF report matters.
+> **`orphan-files`** is a lightweight, focused "unused files only, done properly" tool: true reachability (dead islands don't mask each other) + AST + auto-fix, wrapped in **the richest CI/reporting output in its class (SARIF, PDF, baseline, `--why`, graph, GitHub Action)**. A natural alternative for those who find `knip` too broad, yet want more than the abandoned `unimported`/`deadfile` - especially when GitHub Code Scanning (SARIF) integration or a PDF report matters.
 
 ---
 

@@ -20,7 +20,7 @@ function write(name, content) {
   return filePath;
 }
 
-describe("extractImports — modern syntax", () => {
+describe("extractImports - modern syntax", () => {
   it("parses files that use decorators without crashing", () => {
     const file = write(
       "decorated.ts",

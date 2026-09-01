@@ -738,7 +738,7 @@ describe("resolveImportToFiles", () => {
       fs.writeFileSync(a, `import 'lodash';`);
       const allFiles = [a];
       const set = new Set(allFiles);
-      // No tsAliases passed at all — exercises the `?.` guards.
+      // No tsAliases passed at all - exercises the `?.` guards.
       expect(
         resolveImportToFiles("lodash", a, undefined, set, allFiles),
       ).toEqual([]);

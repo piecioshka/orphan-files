@@ -250,7 +250,7 @@ describe("findWorkspacePackageDirs", () => {
         path.join(tmpDir, "packages", "a", "package.json"),
         JSON.stringify({ name: "a" }),
       );
-      // No "workspaces" in package.json — only the pnpm yaml file.
+      // No "workspaces" in package.json - only the pnpm yaml file.
       fs.writeFileSync(
         path.join(tmpDir, "package.json"),
         JSON.stringify({ name: "root" }),
@@ -367,7 +367,7 @@ describe("collectPackageEntryFiles", () => {
       const allFiles = [...Object.values(files), wildcardFile];
       for (const f of allFiles) fs.writeFileSync(f, "// file");
 
-      // A file that exists on disk but is NOT in allFilesSet — must be excluded.
+      // A file that exists on disk but is NOT in allFilesSet - must be excluded.
       const orphanFile = path.join(tmpDir, "orphan.js");
       fs.writeFileSync(orphanFile, "// orphan");
 
@@ -384,7 +384,7 @@ describe("collectPackageEntryFiles", () => {
             ".": { import: "./export-main.js" },
             "./sub": "./sub.js",
             "./*": "./feat/*.js",
-            // Points at a file that does not exist — must be ignored.
+            // Points at a file that does not exist - must be ignored.
             "./missing": "./nope.js",
           },
           scripts: {
