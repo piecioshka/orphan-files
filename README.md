@@ -16,13 +16,32 @@
 
 <!-- prettier-ignore-end -->
 
-🔨 CLI tool for finding unused files in JavaScript/TypeScript projects.
+🔨 Find the files your project stopped using — including the ones that only import each other.
 
-> Give a ⭐️ if this project helped you!
+```bash
+npx orphan-files
+```
 
 ![orphan-files demo](demo/orphan-files.gif)
 
-Analyses the import graph (`import`, `require`, `jest.mock`, `export * from`, etc.) and reports files that are **not reachable from any entry point** — including whole islands of files that only import each other.
+Most tools ask _"does anything import this file?"_. That question misses **dead islands**: a group of files that import each other, but which nothing reachable ever imports. They keep each other "used" forever.
+
+`orphan-files` instead walks the import graph **from your entry points outwards** (`import`, `require`, dynamic `import()`, `import.meta.glob`, `jest.mock`, `export * from`, …). Anything the walk never reaches is unused — islands included.
+
+Here `report-builder` and `report-utils` import each other, and nothing else imports either of them. An `importedBy > 0` check calls both "used"; a reachability walk reports both:
+
+```console
+$ npx orphan-files
+Found 2 unused files (204 B, 7 LOC reclaimable):
+
+src/legacy/report-builder.js  89 B
+src/legacy/report-utils.js    115 B
+
+$ npx orphan-files --why src/legacy/report-builder.js
+src/legacy/report-builder.js: unused — not reachable from any entry point
+```
+
+> Give a ⭐️ if this project helped you!
 
 ## Features ✨
 
@@ -38,6 +57,23 @@ Analyses the import graph (`import`, `require`, `jest.mock`, `export * from`, et
 - 🤖 Ready-made composite GitHub Action with SARIF for the Code scanning tab
 - 📦 Monorepo support — honours each workspace package's entry points
 - 🙈 Honours `.gitignore`
+
+## Why not just use knip?
+
+[knip](https://www.npmjs.com/package/knip) is the de-facto standard and does **much more** than this tool: unused files, exports, dependencies, and ~150 framework plugins. If you want one tool for all of that, use knip.
+
+`orphan-files` deliberately does **one job**: whole unused files. That focus is what it buys you:
+
+|  | `orphan-files` | Typical file-level alternatives |
+| --- | --- | --- |
+| Analysis model | Reachability from entry points — **catches dead islands** | Usually `importedBy == 0`, which islands defeat |
+| "Why is this file kept?" | `--why <file>` prints the import chain | Rarely available |
+| Output formats | `cli`, `json`, **`sarif`**, **`pdf`** | Usually `cli` only |
+| CI adoption on a legacy repo | `--baseline` + `--max-unused` | Often all-or-nothing |
+| GitHub integration | Composite Action + SARIF → Code scanning tab | Usually DIY |
+| Graph export | `mermaid`, `dot`, `html` | Separate tool |
+
+Full, sourced breakdown of 20+ tools: **[docs/comparison.md](docs/comparison.md)**.
 
 ## How it works
 
@@ -264,41 +300,19 @@ Contributions, issues and feature requests are welcome!<br /> Feel free to check
 
 ## Related packages
 
-> [!TIP] See **[docs/comparison.md](docs/comparison.md)** for a detailed, up-to-date feature comparison of all the tools below against `orphan-files` (analysis model, file/export/dependency detection, monorepo support, output formats, maintenance status).
+> [!TIP] See **[docs/comparison.md](docs/comparison.md)** for a sourced, up-to-date comparison of 20+ tools against `orphan-files` — analysis model, file/export/dependency detection, monorepo support, output formats and maintenance status.
 
-### CLI / API
+**Closest alternatives** (whole files + reachability + standalone CLI):
 
-- **[knip](https://www.npmjs.com/package/knip)** — Detects unused files, exports, and dependencies in JS/TS projects; ~150 built-in framework plugins, supports monorepos.
-- **[unimported](https://www.npmjs.com/package/unimported)** — Scans a Node.js project and reports unimported files and modules. _(archived March 2024 — author recommends knip)_
-- **[dead-files](https://www.npmjs.com/package/dead-files)** — Finds unused files in source code.
-- **[deadfile](https://www.npmjs.com/package/deadfile)** — CLI for detecting unused (dead) code in JavaScript projects.
-- **[dead-code-checker](https://www.npmjs.com/package/dead-code-checker)** — Finds dead code in JavaScript and TypeScript projects.
-- **[tsr](https://www.npmjs.com/package/tsr)** — TypeScript Remove: removes unused code from TypeScript projects (tree-shaking for source files).
-- **[ts-unused-exports](https://www.npmjs.com/package/ts-unused-exports)** — Finds exported TypeScript symbols (functions, classes, variables) not imported anywhere in the project.
-- **[find-unused-exports](https://www.npmjs.com/package/find-unused-exports)** — CLI and JS API for finding unused ECMAScript module exports.
-- **[depcheck](https://www.npmjs.com/package/depcheck)** — Checks unused and missing dependencies in a Node.js project. _(archived June 2025 — author recommends knip)_
-- **[orphan](https://www.npmjs.com/package/orphan)** — Finds orphaned (unimported) files in a project.
-- **[skott](https://www.npmjs.com/package/skott)** — Automatically builds and visualises the dependency graph, detects disconnected files.
-- **[madge](https://www.npmjs.com/package/madge)** — Creates graphs from module dependencies; can identify files with no connections.
-- **[rev-dep](https://www.npmjs.com/package/rev-dep)** — Tracks imports, detects unused code, and cleans up dependencies via a fast CLI.
-- **[next-unused](https://www.npmjs.com/package/next-unused)** — Finds unused files in Next.js projects.
-- **[delete-react-zombies](https://www.npmjs.com/package/delete-react-zombies)** — Finds and removes unimported components in React projects.
+- **[knip](https://www.npmjs.com/package/knip)** — the de-facto standard; files, exports and dependencies, ~150 framework plugins.
+- **[skott](https://www.npmjs.com/package/skott)** — builds and visualises the dependency graph, detects disconnected files.
+- **[rev-dep](https://www.npmjs.com/package/rev-dep)** — tracks imports, detects unused code, fast CLI.
 
-### Webpack plugins
+**Different job, complementary** — unused _exports_ ([ts-unused-exports](https://www.npmjs.com/package/ts-unused-exports), [find-unused-exports](https://www.npmjs.com/package/find-unused-exports), [tsr](https://www.npmjs.com/package/tsr)), _local dead code_ ([dead-code-checker](https://www.npmjs.com/package/dead-code-checker)), _dependencies_ ([depcheck](https://www.npmjs.com/package/depcheck)), _imports_ ([eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports)) and _graph visualisation_ ([madge](https://www.npmjs.com/package/madge)).
 
-- **[webpack-deadcode-plugin](https://www.npmjs.com/package/webpack-deadcode-plugin)** — Detects unused files and unused exports during a Webpack build.
-- **[unused-files-webpack-plugin](https://www.npmjs.com/package/unused-files-webpack-plugin)** — Globs all files not compiled by Webpack in a given context.
-- **[webpack-unused](https://www.npmjs.com/package/webpack-unused)** — Compares files in `src/` against modules processed by the bundler. See also: [overview on YouTube](https://www.youtube.com/watch?v=8nCz0bHS980).
+**Bundler plugins** require running a build, unlike a static CLI — [webpack-deadcode-plugin](https://www.npmjs.com/package/webpack-deadcode-plugin), [vite-plugin-unused-code](https://www.npmjs.com/package/vite-plugin-unused-code), [rollup-plugin-unused](https://www.npmjs.com/package/rollup-plugin-unused), [unplugin-slim](https://www.npmjs.com/package/unplugin-slim).
 
-### Vite / Rollup plugins
-
-- **[vite-plugin-unused-code](https://www.npmjs.com/package/vite-plugin-unused-code)** — Vite/Rollup plugin for detecting unused files and exports.
-- **[rollup-plugin-unused](https://www.npmjs.com/package/rollup-plugin-unused)** — Rollup plugin for checking unused files.
-- **[unplugin-slim](https://www.npmjs.com/package/unplugin-slim)** — Detects unused dependencies and source files (unplugin).
-
-### ESLint plugins
-
-- **[eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports)** — Reports and removes unused ES6 imports during linting.
+**Unmaintained** — [unimported](https://www.npmjs.com/package/unimported) _(archived 2024)_, [depcheck](https://www.npmjs.com/package/depcheck) _(archived 2025)_, [deadfile](https://www.npmjs.com/package/deadfile), [next-unused](https://www.npmjs.com/package/next-unused), [orphan](https://www.npmjs.com/package/orphan).
 
 ---
 

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640" role="img" aria-label="orphan-files - find unused files in your JavaScript and TypeScript project">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#12293d"/>
+      <stop offset="100%" stop-color="#1b4160"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- Decorative graph, right side -->
+  <g transform="translate(880 320)" opacity="0.95">
+    <g stroke="#3f7cb0" stroke-width="6" stroke-linecap="round">
+      <line x1="-110" y1="-120" x2="0" y2="-10"/>
+      <line x1="110" y1="-130" x2="0" y2="-10"/>
+      <line x1="-140" y1="40" x2="0" y2="-10"/>
+      <line x1="-110" y1="-120" x2="-140" y2="40"/>
+      <line x1="0" y1="-10" x2="120" y2="60"/>
+    </g>
+    <line x1="34" y1="30" x2="74" y2="88" stroke="#f5b942" stroke-width="5" stroke-linecap="round" stroke-dasharray="3 12" opacity="0.4"/>
+    <g fill="#5aa6e6" stroke="#12293d" stroke-width="4">
+      <circle cx="-110" cy="-120" r="22"/>
+      <circle cx="110" cy="-130" r="22"/>
+      <circle cx="0" cy="-10" r="26"/>
+      <circle cx="-140" cy="40" r="22"/>
+      <circle cx="120" cy="60" r="22"/>
+    </g>
+    <circle cx="118" cy="163" r="40" fill="none" stroke="#f5b942" stroke-width="2.5" stroke-dasharray="5 9" opacity="0.5"/>
+    <circle cx="118" cy="163" r="25" fill="#f5b942" stroke="#12293d" stroke-width="4"/>
+  </g>
+
+  <!-- Text block, left side -->
+  <g font-family="'Helvetica Neue',Helvetica,Arial,sans-serif">
+    <text x="96" y="250" font-size="82" font-weight="700" fill="#ffffff" letter-spacing="-2">orphan-files</text>
+    <text x="96" y="322" font-size="37" font-weight="500" fill="#9fc9ea">Find unused files in your JS/TS project</text>
+    <text x="96" y="384" font-size="30" font-weight="400" fill="#6f9dc4">True reachability analysis of the import graph</text>
+
+    <!-- Command pill -->
+    <rect x="96" y="432" width="470" height="72" rx="14" fill="#0c1e2e" stroke="#2c5a80" stroke-width="2"/>
+    <text x="126" y="478" font-size="30" font-family="'SF Mono',Menlo,Consolas,monospace" fill="#5aa6e6">$</text>
+    <text x="158" y="478" font-size="30" font-family="'SF Mono',Menlo,Consolas,monospace" fill="#e8f2fa">npx orphan-files</text>
+  </g>
+</svg>

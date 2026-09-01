@@ -29,12 +29,29 @@
   "keywords": [
     "cli",
     "unused",
+    "unused-files",
+    "unused-code",
     "dead-code",
+    "dead-files",
+    "orphan-files",
+    "orphaned-files",
     "files",
     "imports",
+    "import-graph",
+    "dependency-graph",
     "javascript",
     "typescript",
-    "static-analysis"
+    "static-analysis",
+    "code-quality",
+    "cleanup",
+    "refactoring",
+    "monorepo",
+    "ast",
+    "babel",
+    "sarif",
+    "knip-alternative",
+    "tree-shaking",
+    "developer-tools"
   ],
   "author": {
     "name": "Piotr Kowalski",
@@ -68,5 +85,9 @@
     "commitLimit": false,
     "backfillLimit": false,
     "hideCredit": true
+  },
+  "homepage": "https://github.com/piecioshka/orphan-files#readme",
+  "bugs": {
+    "url": "https://github.com/piecioshka/orphan-files/issues"
   }
 }
