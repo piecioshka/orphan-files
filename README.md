@@ -150,10 +150,9 @@ Reads `tsconfig.json` and resolves path aliases automatically (e.g. `@/*` → `s
 Files using **decorators** (Angular, NestJS, TypeORM, MobX) and other modern
 TypeScript syntax are parsed correctly.
 
-## Continuous integration
+## GitHub Action
 
-Run it in CI and fail the build when unused files appear. Upload SARIF to get
-inline annotations in the GitHub "Code scanning" tab:
+Run it in CI and fail the build when unused files appear:
 
 ```yaml
 # .github/workflows/orphan-files.yml
@@ -163,23 +162,54 @@ jobs:
   unused:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22 }
-      - run: npx orphan-files --format sarif > orphan.sarif
+      - uses: actions/checkout@v7
+      - uses: piecioshka/orphan-files@v1
+```
+
+### Inputs
+
+| Input         | Default  | Description                                                        |
+| ------------- | -------- | ------------------------------------------------------------------ |
+| `directory`   | `.`      | Project directory to scan                                          |
+| `format`      | `cli`    | Output format: `cli`, `json`, `sarif`, `pdf`                       |
+| `args`        | _(none)_ | Extra CLI arguments, e.g. `--baseline .orphan-files-baseline.json` |
+| `output-file` | _(none)_ | Write the report to this file instead of stdout                    |
+| `version`     | `latest` | npm version/tag of `orphan-files` to run                           |
+
+The action exits with code `1` when unused files are found, so the job fails
+by default. Use `args: "--max-unused <n>"` or a [baseline](#incremental-adoption-baseline)
+to adopt it incrementally.
+
+### Code scanning (SARIF)
+
+Upload SARIF to get inline annotations in the GitHub "Code scanning" tab:
+
+```yaml
+# .github/workflows/orphan-files.yml
+name: orphan-files
+on: [push, pull_request]
+permissions:
+  contents: read
+  security-events: write
+jobs:
+  unused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: piecioshka/orphan-files@v1
+        with:
+          format: sarif
+          output-file: orphan.sarif
         continue-on-error: true
       - uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: orphan.sarif
 ```
 
-A reusable composite action is also provided:
+Without the action (plain `npx`):
 
 ```yaml
-- uses: piecioshka/orphan-files@v1
-  with:
-    directory: .
-    format: sarif
+- run: npx orphan-files --format sarif > orphan.sarif
 ```
 
 ## API

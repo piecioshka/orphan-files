@@ -1,27 +1,43 @@
-name: 'orphan-files'
-description: 'Find unused files in JavaScript/TypeScript projects by analysing the import graph.'
+name: "orphan-files"
+description: "Find unused files in JavaScript/TypeScript projects by analysing the import graph. Supports SARIF for GitHub code scanning."
 branding:
-  icon: 'trash-2'
-  color: 'blue'
+  icon: "trash-2"
+  color: "blue"
 inputs:
   directory:
-    description: 'Project directory to scan'
+    description: "Project directory to scan"
     required: false
-    default: '.'
+    default: "."
   format:
-    description: 'Output format: cli, json, sarif, pdf'
+    description: "Output format: cli, json, sarif, pdf"
     required: false
-    default: 'cli'
+    default: "cli"
   args:
-    description: 'Extra CLI arguments (e.g. "--baseline .orphan-files-baseline.json")'
+    description: 'Extra CLI arguments (e.g. "--baseline .orphan-files-baseline.json --max-unused 5")'
     required: false
-    default: ''
+    default: ""
+  output-file:
+    description: "Write the report to this file instead of stdout (useful for SARIF upload)"
+    required: false
+    default: ""
   version:
-    description: 'npm version/tag of orphan-files to run'
+    description: "npm version/tag of orphan-files to run"
     required: false
-    default: 'latest'
+    default: "latest"
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
-    - run: npx --yes orphan-files@${{ inputs.version }} "${{ inputs.directory }}" --format "${{ inputs.format }}" ${{ inputs.args }}
+    - name: Run orphan-files
+      run: |
+        if [ -n "$OUTPUT_FILE" ]; then
+          npx --yes "orphan-files@$VERSION" "$DIRECTORY" --format "$FORMAT" $ARGS < /dev/null > "$OUTPUT_FILE"
+        else
+          npx --yes "orphan-files@$VERSION" "$DIRECTORY" --format "$FORMAT" $ARGS < /dev/null
+        fi
       shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        DIRECTORY: ${{ inputs.directory }}
+        FORMAT: ${{ inputs.format }}
+        ARGS: ${{ inputs.args }}
+        OUTPUT_FILE: ${{ inputs.output-file }}
