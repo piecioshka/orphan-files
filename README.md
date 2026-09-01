@@ -4,6 +4,8 @@
   <img src="assets/logo.svg" width="128" alt="orphan-files logo"/>
 </p>
 
+<!-- prettier-ignore-start -->
+
 [![cli-available](https://badgen.net/static/cli/available/?icon=terminal)](#cli)
 [![node version](https://img.shields.io/node/v/orphan-files.svg)](https://www.npmjs.com/package/orphan-files)
 [![npm version](https://badge.fury.io/js/orphan-files.svg)](https://badge.fury.io/js/orphan-files)
@@ -12,11 +14,30 @@
 [![license](https://img.shields.io/npm/l/orphan-files.svg)](https://piecioshka.mit-license.org)
 [![github-ci](https://github.com/piecioshka/orphan-files/actions/workflows/ci.yml/badge.svg)](https://github.com/piecioshka/orphan-files/actions/workflows/ci.yml)
 
-CLI tool for finding unused files in JavaScript/TypeScript projects.
+<!-- prettier-ignore-end -->
+
+🔨 CLI tool for finding unused files in JavaScript/TypeScript projects.
+
+> Give a ⭐️ if this project helped you!
 
 ![orphan-files demo](demo/orphan-files.gif)
 
 Analyses the import graph (`import`, `require`, `jest.mock`, `export * from`, etc.) and reports files that are **not reachable from any entry point** — including whole islands of files that only import each other.
+
+## Features ✨
+
+- 🧠 True reachability analysis — dead islands that only import each other don't mask each other
+- 🌳 Babel AST parsing — JSX, TypeScript, decorators, top-level await
+- 🧭 Framework auto-detection — Next.js, Vite, Storybook, Remotion
+- 🗺️ Resolves `tsconfig` path aliases and `baseUrl`
+- 📊 Four output formats — `cli`, `json`, `sarif`, `pdf`
+- 🧹 Auto-deletion — `--fix` (dry-run) and `--force`
+- 🔍 Explainability — `--why <file>` tells you why a file is kept or unused
+- 🕸️ Graph export — `mermaid`, `dot`, `html`
+- 📏 Baseline for incremental adoption
+- 🤖 Ready-made composite GitHub Action with SARIF for the Code scanning tab
+- 📦 Monorepo support — honours each workspace package's entry points
+- 🙈 Honours `.gitignore`
 
 ## How it works
 
@@ -240,6 +261,10 @@ console.log(unused);
 ```
 
 ---
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br /> Feel free to check [issues page](https://github.com/piecioshka/orphan-files/issues/).
 
 ## Related packages
 
