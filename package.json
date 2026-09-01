@@ -21,7 +21,9 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "version": "auto-changelog -p && git add CHANGELOG.md"
+    "postversion": "auto-changelog && git add CHANGELOG.md && git commit --amend --no-edit --no-verify && git tag -f v$npm_package_version",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [
     "cli",
@@ -58,6 +60,7 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.8",
     "auto-changelog": "^2.6.0",
+    "prettier": "^3.9.6",
     "vitest": "^4.1.8"
   }
 }
