@@ -6,6 +6,8 @@ import {
   findWorkspacePackageDirs,
   collectPackageEntryFiles,
   loadUserConfig,
+  findDefaultConfig,
+  DEFAULT_CONFIG_BASENAME,
 } from "../lib/config.js";
 import path from "path";
 import fs from "fs";
@@ -673,5 +675,38 @@ describe("loadUserConfig", () => {
     } finally {
       fs.rmSync(tmpDir, { recursive: true });
     }
+  });
+});
+
+describe("findDefaultConfig", () => {
+  it("returns null when the directory has no config", () => {
+    const dir = makeTmpDir("orphan-cfg-none-");
+    expect(findDefaultConfig(dir)).toBe(null);
+  });
+
+  for (const ext of [".js", ".mjs", ".cjs", ".json"]) {
+    it(`finds the default config with a ${ext} extension`, () => {
+      const dir = makeTmpDir("orphan-cfg-ext-");
+      const name = `${DEFAULT_CONFIG_BASENAME}${ext}`;
+      fs.writeFileSync(path.join(dir, name), "{}");
+      expect(findDefaultConfig(dir)).toBe(name);
+    });
+  }
+
+  it("prefers .js when several extensions are present", () => {
+    const dir = makeTmpDir("orphan-cfg-order-");
+    for (const ext of [".mjs", ".json", ".js"]) {
+      fs.writeFileSync(
+        path.join(dir, `${DEFAULT_CONFIG_BASENAME}${ext}`),
+        "{}",
+      );
+    }
+    expect(findDefaultConfig(dir)).toBe(`${DEFAULT_CONFIG_BASENAME}.js`);
+  });
+
+  it("ignores a file that only shares the basename", () => {
+    const dir = makeTmpDir("orphan-cfg-other-");
+    fs.writeFileSync(path.join(dir, `${DEFAULT_CONFIG_BASENAME}.ts`), "{}");
+    expect(findDefaultConfig(dir)).toBe(null);
   });
 });

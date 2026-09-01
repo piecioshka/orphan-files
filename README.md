@@ -119,7 +119,7 @@ orphan-files --init
 
 | Option | Description |
 | --- | --- |
-| `-c, --config <path>` | Config file (default: `orphan-files.config.js`) |
+| `-c, --config <path>` | Config file (default: `orphan-files.config.{js,mjs,cjs,json}`) |
 | `-f, --format <type>` | Output: `cli`, `json`, `sarif`, `pdf` (default: `cli`) |
 | `--sort <key>` | Sort unused files: `path`, `name`, `size` |
 | `--group` | Group unused files by directory |
@@ -178,7 +178,7 @@ export default {
 };
 ```
 
-Config files may be `.js`, `.mjs`, `.cjs` (default export) or `.json`. Monorepos are supported: each workspace package's `package.json` entry points are honoured.
+Config files may be `.js`, `.mjs`, `.cjs` (default export) or `.json`; the default `orphan-files.config.*` is discovered with any of those extensions. Monorepos are supported: each workspace package's `package.json` entry points are honoured.
 
 ### Framework auto-detection
 
