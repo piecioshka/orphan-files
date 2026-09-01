@@ -230,6 +230,8 @@ jobs:
 | `args` | _(none)_ | Extra CLI arguments, e.g. `--baseline .orphan-files-baseline.json` |
 | `output-file` | _(none)_ | Write the report to this file instead of stdout |
 | `version` | `latest` | npm version/tag of `orphan-files` to run |
+| `comment` | `false` | Comment the report on the pull request |
+| `token` | `${{ github.token }}` | Token used to post the comment |
 
 ### Outputs
 
@@ -253,6 +255,32 @@ The three counters are read from the JSON report, so they are only set when `for
 ```
 
 The action exits with code `1` when unused files are found, so the job fails by default. Use `args: "--max-unused <n>"` or a [baseline](#incremental-adoption-baseline) to adopt it incrementally.
+
+### Pull request comments
+
+Set `comment: true` to have the report posted on the pull request. The action keeps **one** comment and edits it on every run, so a busy branch does not collect a stack of near-identical bot messages.
+
+```yaml
+# .github/workflows/orphan-files.yml
+name: orphan-files
+on: [pull_request]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  unused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: piecioshka/orphan-files@v1
+        with:
+          comment: true
+          args: "--baseline .orphan-files-baseline.json"
+```
+
+The job needs `pull-requests: write`. A clean run stays silent, and clears a previous report if there was one. Failing to comment (a missing permission, a fork's read-only token) only logs a warning — the scan result stays the signal that fails the build.
+
+The comment needs the JSON report, so when `format` is anything else the action runs a second scan to produce it.
 
 ### Code scanning (SARIF)
 

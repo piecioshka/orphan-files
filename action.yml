@@ -24,6 +24,14 @@ inputs:
     description: "npm version/tag of orphan-files to run"
     required: false
     default: "latest"
+  comment:
+    description: "Comment the report on the pull request (updates one comment in place)"
+    required: false
+    default: "false"
+  token:
+    description: "Token used to post the comment. Needs pull-requests: write."
+    required: false
+    default: ${{ github.token }}
 outputs:
   unused-count:
     description: "Number of unused files found. Only set when format is json, otherwise empty."
@@ -97,3 +105,35 @@ runs:
         FORMAT: ${{ inputs.format }}
         ARGS: ${{ inputs.args }}
         OUTPUT_FILE: ${{ inputs.output-file }}
+
+    - name: Comment the report on the pull request
+      # Runs even when the scan step failed, because a failing scan is exactly
+      # the case worth reporting on the pull request.
+      if: ${{ always() && inputs.comment == 'true' && github.event_name != 'schedule' }}
+      run: |
+        set -eo pipefail
+
+        set -f
+        # shellcheck disable=SC2206
+        EXTRA=($ARGS)
+        set +f
+
+        # The comment needs the machine-readable report. Reuse the one the scan
+        # already produced when it was JSON; otherwise scan once more for it.
+        if [ "$FORMAT" = "json" ] && [ -n "$OUTPUT_FILE" ]; then
+          REPORT="$OUTPUT_FILE"
+        else
+          REPORT="$(mktemp)"
+          npx --yes "orphan-files@$VERSION" "$DIRECTORY" \
+            --format json "${EXTRA[@]}" < /dev/null > "$REPORT" || true
+        fi
+
+        node "$GITHUB_ACTION_PATH/.github/actions/pr-comment.mjs" "$REPORT"
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        DIRECTORY: ${{ inputs.directory }}
+        FORMAT: ${{ inputs.format }}
+        ARGS: ${{ inputs.args }}
+        OUTPUT_FILE: ${{ inputs.output-file }}
+        COMMENT_TOKEN: ${{ inputs.token }}

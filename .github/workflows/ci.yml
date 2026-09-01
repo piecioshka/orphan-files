@@ -67,3 +67,9 @@ jobs:
           test -n "${{ steps.json-run.outputs.total-files }}"
           test "${{ steps.json-run.outputs.report-file }}" = "orphan.json"
           echo "unused=${{ steps.json-run.outputs.unused-count }} of ${{ steps.json-run.outputs.total-files }} files"
+
+      - name: Verify the comment step degrades without a token
+        run: |
+          OUTPUT=$(COMMENT_TOKEN="" node .github/actions/pr-comment.mjs orphan.json)
+          echo "$OUTPUT"
+          echo "$OUTPUT" | grep -q "No token supplied"
