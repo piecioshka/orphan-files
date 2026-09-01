@@ -24,7 +24,7 @@
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "version": "auto-changelog -p && git add CHANGELOG.md"
+    "postversion": "auto-changelog && git add CHANGELOG.md && git commit --amend --no-edit --no-verify && git tag -f v$npm_package_version"
   },
   "keywords": [
     "cli",
