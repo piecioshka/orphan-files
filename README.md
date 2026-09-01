@@ -16,7 +16,7 @@
 
 <!-- prettier-ignore-end -->
 
-🔨 Find the files your project stopped using — including the ones that only import each other.
+🔨 Find the files your project stopped using - including the ones that only import each other.
 
 ```bash
 npx orphan-files
@@ -26,7 +26,7 @@ npx orphan-files
 
 Most tools ask _"does anything import this file?"_. That question misses **dead islands**: a group of files that import each other, but which nothing reachable ever imports. They keep each other "used" forever.
 
-`orphan-files` instead walks the import graph **from your entry points outwards** (`import`, `require`, dynamic `import()`, `import.meta.glob`, `jest.mock`, `export * from`, …). Anything the walk never reaches is unused — islands included.
+`orphan-files` instead walks the import graph **from your entry points outwards** (`import`, `require`, dynamic `import()`, `import.meta.glob`, `jest.mock`, `export * from`, …). Anything the walk never reaches is unused - islands included.
 
 Here `report-builder` and `report-utils` import each other, and nothing else imports either of them. An `importedBy > 0` check calls both "used"; a reachability walk reports both:
 
@@ -38,24 +38,24 @@ src/legacy/report-builder.js  89 B
 src/legacy/report-utils.js    115 B
 
 $ npx orphan-files --why src/legacy/report-builder.js
-src/legacy/report-builder.js: unused — not reachable from any entry point
+src/legacy/report-builder.js: unused - not reachable from any entry point
 ```
 
 > Give a ⭐️ if this project helped you!
 
 ## Features ✨
 
-- 🧠 True reachability analysis — dead islands that only import each other don't mask each other
-- 🌳 Babel AST parsing — JSX, TypeScript, decorators, top-level await
-- 🧭 Framework auto-detection — Next.js, Vite, Storybook, Remotion
+- 🧠 True reachability analysis - dead islands that only import each other don't mask each other
+- 🌳 Babel AST parsing - JSX, TypeScript, decorators, top-level await
+- 🧭 Framework auto-detection - Next.js, Vite, Storybook, Remotion
 - 🗺️ Resolves `tsconfig` path aliases and `baseUrl`
-- 📊 Four output formats — `cli`, `json`, `sarif`, `pdf`
-- 🧹 Auto-deletion — `--fix` (dry-run) and `--force`
-- 🔍 Explainability — `--why <file>` tells you why a file is kept or unused
-- 🕸️ Graph export — `mermaid`, `dot`, `html`
+- 📊 Four output formats - `cli`, `json`, `sarif`, `pdf`
+- 🧹 Auto-deletion - `--fix` (dry-run) and `--force`
+- 🔍 Explainability - `--why <file>` tells you why a file is kept or unused
+- 🕸️ Graph export - `mermaid`, `dot`, `html`
 - 📏 Baseline for incremental adoption
 - 🤖 Ready-made composite GitHub Action with SARIF for the Code scanning tab
-- 📦 Monorepo support — honours each workspace package's entry points
+- 📦 Monorepo support - honours each workspace package's entry points
 - 🙈 Honours `.gitignore`
 
 ## Why not just use knip?
@@ -66,7 +66,7 @@ src/legacy/report-builder.js: unused — not reachable from any entry point
 
 |  | `orphan-files` | Typical file-level alternatives |
 | --- | --- | --- |
-| Analysis model | Reachability from entry points — **catches dead islands** | Usually `importedBy == 0`, which islands defeat |
+| Analysis model | Reachability from entry points - **catches dead islands** | Usually `importedBy == 0`, which islands defeat |
 | "Why is this file kept?" | `--why <file>` prints the import chain | Rarely available |
 | Output formats | `cli`, `json`, **`sarif`**, **`pdf`** | Usually `cli` only |
 | CI adoption on a legacy repo | `--baseline` + `--max-unused` | Often all-or-nothing |
@@ -80,7 +80,7 @@ Full, sourced breakdown of 20+ tools: **[docs/comparison.md](docs/comparison.md)
 1. Globs the project for source files (honouring `.gitignore` and your `exclude` patterns).
 2. Parses each file with Babel and extracts every import specifier.
 3. Resolves each specifier (relative paths, `tsconfig` path aliases, `baseUrl`, `import.meta.glob`).
-4. Determines **entry points** — `package.json` (`main`/`module`/`exports`/`bin`/`types`), framework conventions (Next.js, Vite, Storybook, Remotion…), tests, configs, `index`/`main` barrels, and your config.
+4. Determines **entry points** - `package.json` (`main`/`module`/`exports`/`bin`/`types`), framework conventions (Next.js, Vite, Storybook, Remotion…), tests, configs, `index`/`main` barrels, and your config.
 5. Walks the graph from those entry points; anything it can't reach is unused.
 
 This is a true reachability analysis: two dead files that import each other will **not** mask each other.
@@ -198,7 +198,7 @@ Reads `tsconfig.json` and resolves path aliases automatically (e.g. `@/*` → `s
 
 - `import '...'` / `import x from '...'`
 - `require('...')`
-- `import('...')` (dynamic import) — template literals like ``import(`./pages/${name}.js`)`` are matched as a glob
+- `import('...')` (dynamic import) - template literals like ``import(`./pages/${name}.js`)`` are matched as a glob
 - `import.meta.glob('./dir/*.js')` (Vite)
 - `jest.mock('...')` / `vi.mock('...')`
 - `export * from '...'` / `export { x } from '...'`
@@ -278,7 +278,7 @@ jobs:
           args: "--baseline .orphan-files-baseline.json"
 ```
 
-The job needs `pull-requests: write`. A clean run stays silent, and clears a previous report if there was one. Failing to comment (a missing permission, a fork's read-only token) only logs a warning — the scan result stays the signal that fails the build.
+The job needs `pull-requests: write`. A clean run stays silent, and clears a previous report if there was one. Failing to comment (a missing permission, a fork's read-only token) only logs a warning - the scan result stays the signal that fails the build.
 
 The comment needs the JSON report, so when `format` is anything else the action runs a second scan to produce it.
 
@@ -349,19 +349,24 @@ Contributions, issues and feature requests are welcome!<br /> Feel free to check
 
 ## Related packages
 
-> [!TIP] See **[docs/comparison.md](docs/comparison.md)** for a sourced, up-to-date comparison of 20+ tools against `orphan-files` — analysis model, file/export/dependency detection, monorepo support, output formats and maintenance status.
+<!-- prettier-ignore-start -->
+
+> [!TIP]
+> See **[docs/comparison.md](docs/comparison.md)** for a sourced, up-to-date comparison of 20+ tools against `orphan-files` - analysis model, file/export/dependency detection, monorepo support, output formats and maintenance status.
+
+<!-- prettier-ignore-end -->
 
 **Closest alternatives** (whole files + reachability + standalone CLI):
 
-- **[knip](https://www.npmjs.com/package/knip)** — the de-facto standard; files, exports and dependencies, ~150 framework plugins.
-- **[skott](https://www.npmjs.com/package/skott)** — builds and visualises the dependency graph, detects disconnected files.
-- **[rev-dep](https://www.npmjs.com/package/rev-dep)** — tracks imports, detects unused code, fast CLI.
+- **[knip](https://www.npmjs.com/package/knip)** - the de-facto standard; files, exports and dependencies, ~150 framework plugins.
+- **[skott](https://www.npmjs.com/package/skott)** - builds and visualises the dependency graph, detects disconnected files.
+- **[rev-dep](https://www.npmjs.com/package/rev-dep)** - tracks imports, detects unused code, fast CLI.
 
-**Different job, complementary** — unused _exports_ ([ts-unused-exports](https://www.npmjs.com/package/ts-unused-exports), [find-unused-exports](https://www.npmjs.com/package/find-unused-exports), [tsr](https://www.npmjs.com/package/tsr)), _local dead code_ ([dead-code-checker](https://www.npmjs.com/package/dead-code-checker)), _dependencies_ ([depcheck](https://www.npmjs.com/package/depcheck)), _imports_ ([eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports)) and _graph visualisation_ ([madge](https://www.npmjs.com/package/madge)).
+**Different job, complementary** - unused _exports_ ([ts-unused-exports](https://www.npmjs.com/package/ts-unused-exports), [find-unused-exports](https://www.npmjs.com/package/find-unused-exports), [tsr](https://www.npmjs.com/package/tsr)), _local dead code_ ([dead-code-checker](https://www.npmjs.com/package/dead-code-checker)), _dependencies_ ([depcheck](https://www.npmjs.com/package/depcheck)), _imports_ ([eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports)) and _graph visualisation_ ([madge](https://www.npmjs.com/package/madge)).
 
-**Bundler plugins** require running a build, unlike a static CLI — [webpack-deadcode-plugin](https://www.npmjs.com/package/webpack-deadcode-plugin), [vite-plugin-unused-code](https://www.npmjs.com/package/vite-plugin-unused-code), [rollup-plugin-unused](https://www.npmjs.com/package/rollup-plugin-unused), [unplugin-slim](https://www.npmjs.com/package/unplugin-slim).
+**Bundler plugins** require running a build, unlike a static CLI - [webpack-deadcode-plugin](https://www.npmjs.com/package/webpack-deadcode-plugin), [vite-plugin-unused-code](https://www.npmjs.com/package/vite-plugin-unused-code), [rollup-plugin-unused](https://www.npmjs.com/package/rollup-plugin-unused), [unplugin-slim](https://www.npmjs.com/package/unplugin-slim).
 
-**Unmaintained** — [unimported](https://www.npmjs.com/package/unimported) _(archived 2024)_, [depcheck](https://www.npmjs.com/package/depcheck) _(archived 2025)_, [deadfile](https://www.npmjs.com/package/deadfile), [next-unused](https://www.npmjs.com/package/next-unused), [orphan](https://www.npmjs.com/package/orphan).
+**Unmaintained** - [unimported](https://www.npmjs.com/package/unimported) _(archived 2024)_, [depcheck](https://www.npmjs.com/package/depcheck) _(archived 2025)_, [deadfile](https://www.npmjs.com/package/deadfile), [next-unused](https://www.npmjs.com/package/next-unused), [orphan](https://www.npmjs.com/package/orphan).
 
 ---
 
