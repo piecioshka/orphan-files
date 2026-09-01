@@ -61,6 +61,18 @@ describe("cli - new features", () => {
       );
       expect(process.exit).toHaveBeenCalledWith(1);
     });
+
+    it("refuses when a config exists under another extension", async () => {
+      write("orphan-files.config.mjs", "export default {};");
+      await cli(tmpDir, "--init");
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining("orphan-files.config.mjs"),
+      );
+      expect(fs.existsSync(path.join(tmpDir, "orphan-files.config.js"))).toBe(
+        false,
+      );
+      expect(process.exit).toHaveBeenCalledWith(1);
+    });
   });
 
   describe("--why", () => {

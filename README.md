@@ -153,7 +153,7 @@ npx orphan-files --graph html > graph.html
 
 ## Configuration
 
-Create an `orphan-files.config.js` file in your project root:
+Create an `orphan-files.config.js` file in your project root - `.mjs`, `.cjs` and `.json` work too, and are picked up automatically:
 
 ```js
 export default {
@@ -178,7 +178,11 @@ export default {
 };
 ```
 
-Config files may be `.js`, `.mjs`, `.cjs` (default export) or `.json`; the default `orphan-files.config.*` is discovered with any of those extensions. Monorepos are supported: each workspace package's `package.json` entry points are honoured.
+The `.js`, `.mjs` and `.cjs` forms use a default export; `.json` holds the object itself. Extensions are tried in the order `.js`, `.mjs`, `.cjs`, `.json`, and `--config <path>` overrides the lookup entirely.
+
+In a CommonJS project (no `"type": "module"` in `package.json`) prefer `orphan-files.config.mjs`: an ESM config in a plain `.js` file still works, but Node reparses it and prints a `MODULE_TYPELESS_PACKAGE_JSON` warning on every run.
+
+Monorepos are supported: each workspace package's `package.json` entry points are honoured.
 
 ### Framework auto-detection
 
