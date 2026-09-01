@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v1.0.2](https://github.com/piecioshka/orphan-files/compare/v1.0.1...v1.0.2)
+
+> 1 September 2026
+
+- docs: sharpen marketing positioning and add social preview image [`a8fa80e`](https://github.com/piecioshka/orphan-files/commit/a8fa80ea990d35c05d132af9aaf4da326de3aef6)
+- chore: unify auto-changelog setup across packages [`21edb03`](https://github.com/piecioshka/orphan-files/commit/21edb0385e9ce969a635408c65c5781a8c1e674a)
+- chore: move auto-changelog to the postversion hook [`e1c4c9f`](https://github.com/piecioshka/orphan-files/commit/e1c4c9f3a604603085dcefe87981fc101223bf1e)
+
 #### [v1.0.1](https://github.com/piecioshka/orphan-files/compare/v1.0.0...v1.0.1)
 
 > 1 September 2026
