@@ -24,16 +24,72 @@ inputs:
     description: "npm version/tag of orphan-files to run"
     required: false
     default: "latest"
+outputs:
+  unused-count:
+    description: "Number of unused files found. Only set when format is json, otherwise empty."
+    value: ${{ steps.run.outputs.unused-count }}
+  reclaimable-bytes:
+    description: "Total size of the unused files in bytes. Only set when format is json, otherwise empty."
+    value: ${{ steps.run.outputs.reclaimable-bytes }}
+  total-files:
+    description: "Number of files scanned. Only set when format is json, otherwise empty."
+    value: ${{ steps.run.outputs.total-files }}
+  report-file:
+    description: "Path the report was written to, when output-file was given."
+    value: ${{ steps.run.outputs.report-file }}
 runs:
   using: "composite"
   steps:
     - name: Run orphan-files
+      id: run
       run: |
+        set -o pipefail
+
+        # Split the free-form args input into words without letting the shell
+        # glob or word-split on anything else in the workspace.
+        set -f
+        # shellcheck disable=SC2206
+        EXTRA=($ARGS)
+        set +f
+
         if [ -n "$OUTPUT_FILE" ]; then
-          npx --yes "orphan-files@$VERSION" "$DIRECTORY" --format "$FORMAT" $ARGS < /dev/null > "$OUTPUT_FILE"
+          REPORT="$OUTPUT_FILE"
+          echo "report-file=$REPORT" >> "$GITHUB_OUTPUT"
         else
-          npx --yes "orphan-files@$VERSION" "$DIRECTORY" --format "$FORMAT" $ARGS < /dev/null
+          REPORT="$(mktemp)"
         fi
+
+        STATUS=0
+        npx --yes "orphan-files@$VERSION" "$DIRECTORY" \
+          --format "$FORMAT" "${EXTRA[@]}" < /dev/null > "$REPORT" || STATUS=$?
+
+        # Without an output-file the report is the step's own stdout.
+        if [ -z "$OUTPUT_FILE" ]; then
+          cat "$REPORT"
+        fi
+
+        # Only the JSON report is machine-readable, so that is the one case
+        # where the counts can be published without a second scan.
+        if [ "$FORMAT" = "json" ]; then
+          node -e '
+            const fs = require("fs");
+            let report;
+            try {
+              report = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+            } catch {
+              process.exit(0);
+            }
+            const lines = [
+              `unused-count=${report.unusedCount ?? ""}`,
+              `reclaimable-bytes=${report.reclaimableBytes ?? ""}`,
+              `total-files=${report.totalFiles ?? ""}`,
+            ];
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, lines.join("\n") + "\n");
+          ' "$REPORT"
+        fi
+
+        [ -n "$OUTPUT_FILE" ] || rm -f "$REPORT"
+        exit "$STATUS"
       shell: bash
       env:
         VERSION: ${{ inputs.version }}

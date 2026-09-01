@@ -6,6 +6,8 @@ coverage/
 dist/
 tmp/
 reports/
+orphan.json
+orphan.sarif
 
 !.vscode/
 

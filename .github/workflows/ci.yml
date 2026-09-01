@@ -51,3 +51,19 @@ jobs:
         with:
           directory: .
           format: cli
+
+      - name: Run the composite action with JSON output
+        id: json-run
+        uses: ./
+        with:
+          directory: .
+          format: json
+          output-file: orphan.json
+
+      - name: Verify the action published its outputs
+        run: |
+          test -s orphan.json
+          test -n "${{ steps.json-run.outputs.unused-count }}"
+          test -n "${{ steps.json-run.outputs.total-files }}"
+          test "${{ steps.json-run.outputs.report-file }}" = "orphan.json"
+          echo "unused=${{ steps.json-run.outputs.unused-count }} of ${{ steps.json-run.outputs.total-files }} files"

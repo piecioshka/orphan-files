@@ -231,6 +231,27 @@ jobs:
 | `output-file` | _(none)_ | Write the report to this file instead of stdout |
 | `version` | `latest` | npm version/tag of `orphan-files` to run |
 
+### Outputs
+
+| Output | Description |
+| --- | --- |
+| `unused-count` | Number of unused files found |
+| `reclaimable-bytes` | Total size of those files, in bytes |
+| `total-files` | Number of files scanned |
+| `report-file` | Path the report was written to, when `output-file` was given |
+
+The three counters are read from the JSON report, so they are only set when `format: json`. Other formats leave them empty rather than paying for a second scan.
+
+```yaml
+- uses: piecioshka/orphan-files@v1
+  id: orphans
+  with:
+    format: json
+    args: "--max-unused 5"
+  continue-on-error: true
+- run: echo "${{ steps.orphans.outputs.unused-count }} unused files, ${{ steps.orphans.outputs.reclaimable-bytes }} B reclaimable"
+```
+
 The action exits with code `1` when unused files are found, so the job fails by default. Use `args: "--max-unused <n>"` or a [baseline](#incremental-adoption-baseline) to adopt it incrementally.
 
 ### Code scanning (SARIF)
