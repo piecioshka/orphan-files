@@ -351,6 +351,8 @@ console.log(unused);
 
 Contributions, issues and feature requests are welcome!<br /> Feel free to check [issues page](https://github.com/piecioshka/orphan-files/issues/).
 
+Setup, tests and the release flow are described in [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Related packages
 
 <!-- prettier-ignore-start -->
