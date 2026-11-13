@@ -48,7 +48,7 @@ action.yml                 - composite GitHub Action
 .github/actions/pr-comment.mjs - pull request comment step of the Action
 tests/                     - Vitest tests
 tests/fixtures/            - sample projects used by the tests
-demo/orphan-files.tape     - VHS script for demo/orphan-files.gif
+scripts/demo.tape          - VHS script for docs/demo.gif
 docs/comparison.md         - comparison with other tools
 ```
 
@@ -56,10 +56,10 @@ The repo checks itself: `orphan-files.config.js` keeps `tests/fixtures/**` as ex
 
 ## Demo GIF
 
-`demo/orphan-files.gif` is recorded with [VHS](https://github.com/charmbracelet/vhs) from `demo/orphan-files.tape`:
+`docs/demo.gif` is recorded with [VHS](https://github.com/charmbracelet/vhs) from `scripts/demo.tape`:
 
 ```bash
-vhs demo/orphan-files.tape
+vhs scripts/demo.tape
 ```
 
 The tape needs `orphan-files` on `PATH` and a prepared demo project in `/tmp/orphan-files-demo`.

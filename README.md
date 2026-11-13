@@ -22,7 +22,7 @@
 npx orphan-files
 ```
 
-![orphan-files demo](demo/orphan-files.gif)
+![orphan-files demo](docs/demo.gif)
 
 Most tools ask _"does anything import this file?"_. That question misses **dead islands**: a group of files that import each other, but which nothing reachable ever imports. They keep each other "used" forever.
 

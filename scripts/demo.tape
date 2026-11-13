@@ -1,4 +1,4 @@
-Output demo/orphan-files.gif
+Output docs/demo.gif
 
 Require orphan-files
 
